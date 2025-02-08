@@ -1,12 +1,10 @@
 import random
 import time
 
-
 def print_intro():
-    print("\nWelcome, brave adventurer! You stand at the entrance of the Dungeon of Evil Kyle.")
-    print("Your quest is to retrieve the Lost Amulet of Rachel hidden deep within the maze-like depths.")
+    print("\nWelcome, brave adventurer! You stand at the entrance of the Dungeon of Shadows.")
+    print("Your quest is to retrieve the Lost Amulet of Eldoria hidden deep within the maze-like depths.")
     print("Choose your actions wisely, for danger lurks around every corner!\n")
-
 
 def get_choice(options):
     print("\nChoose your action:")
@@ -17,14 +15,12 @@ def get_choice(options):
         choice = input("Invalid choice. Please enter a valid number: ")
     return int(choice)
 
-
 def encounter_enemy():
     enemies = ["Goblin", "Skeleton Warrior", "Dark Mage", "Ogre"]
     enemy = random.choice(enemies)
     print(f"\nA {enemy} appears!")
     print("Prepare for battle!")
     return enemy
-
 
 def combat(player_hp, enemy_hp, enemy_name):
     print(f"\nYou are fighting {enemy_name}!")
@@ -36,7 +32,8 @@ def combat(player_hp, enemy_hp, enemy_name):
             enemy_hp -= player_damage
             print(f"You strike {enemy_name}, dealing {player_damage} damage!")
         elif action == 2:  # Defend
-            block = random.randint(1, 5)
+            enemy_damage = random.randint(5, 12)
+            block = min(random.randint(5, 13), enemy_damage)
             print(f"You raise your shield, reducing incoming damage by {block}!")
         elif action == 3:  # Run
             if random.random() < 0.5:
@@ -51,12 +48,12 @@ def combat(player_hp, enemy_hp, enemy_name):
         elif action == 5:  # Use Item
             print("You search your inventory...")
             print("(Feature to use items will be implemented later)")
-
+        
         if enemy_hp > 0:
             enemy_damage = random.randint(5, 12)
             print(f"{enemy_name} attacks and deals {enemy_damage} damage!")
-            player_hp -= enemy_damage
-
+            player_hp -= max(0, enemy_damage - block)
+    
     if player_hp > 0:
         print(f"\nYou have defeated {enemy_name}!")
         return True
@@ -64,24 +61,27 @@ def combat(player_hp, enemy_hp, enemy_name):
         print(f"\nYou have fallen in battle against {enemy_name}...")
         return False
 
-
 def dungeon_master():
     player_hp = 50
     inventory = []
     battle_count = 0
+    last_encounter = None
     print_intro()
-
+    
     while True:
-        choice = get_choice(
-            ["Enter the dungeon", "Check inventory", "Rest", "Look for a secret passage", "Leave the quest"])
-
+        choice = get_choice(["Enter the dungeon", "Check inventory", "Rest", "Look for a secret passage", "Leave the quest"])
+        
         if choice == 1:
             print("\nYou step into the dark halls of the dungeon...")
-            if battle_count < 5:
-                encounter = random.choice(["enemy", "treasure", "trap", "nothing"])
-            else:
+            possible_encounters = ["enemy", "treasure", "trap", "nothing"]
+            if battle_count >= 5:
                 encounter = "final_boss"
-
+            else:
+                if last_encounter:
+                    possible_encounters.remove(last_encounter)
+                encounter = random.choice(possible_encounters)
+            last_encounter = encounter
+            
             if encounter == "enemy":
                 enemy = encounter_enemy()
                 if not combat(player_hp, random.randint(20, 40), enemy):
@@ -127,9 +127,8 @@ def dungeon_master():
         elif choice == 5:
             print("You turn back, leaving the dungeon behind...")
             break
-
+    
     print("\nYour adventure has come to an end!")
-
 
 if __name__ == "__main__":
     dungeon_master()
