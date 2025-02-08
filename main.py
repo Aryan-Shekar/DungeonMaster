@@ -2,8 +2,8 @@ import random
 import time
 
 def print_intro():
-    print("\nWelcome, brave adventurer! You stand at the entrance of the Dungeon of Rachel.")
-    print("Your quest is to retrieve the Lost Amulet of Eldoria hidden deep within the maze-like depths.")
+    print("\nWelcome, brave adventurer! You stand at the entrance of the Dungeon of Evil Kyle.")
+    print("Your quest is to retrieve the Lost Amulet of Rachel hidden deep within the maze-like depths.")
     print("Choose your actions wisely, for danger lurks around every corner!\n")
 
 def get_choice(options):
